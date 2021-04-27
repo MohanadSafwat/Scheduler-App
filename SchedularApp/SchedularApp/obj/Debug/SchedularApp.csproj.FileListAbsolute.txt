@@ -1,0 +1,6 @@
+/Users/mohanadsafwat/Documents/GitHub/Scheduler-App/SchedularApp/SchedularApp/bin/Debug/SchedularApp.exe
+/Users/mohanadsafwat/Documents/GitHub/Scheduler-App/SchedularApp/SchedularApp/bin/Debug/SchedularApp.pdb
+/Users/mohanadsafwat/Documents/GitHub/Scheduler-App/SchedularApp/SchedularApp/obj/Debug/SchedularApp.csprojAssemblyReference.cache
+/Users/mohanadsafwat/Documents/GitHub/Scheduler-App/SchedularApp/SchedularApp/obj/Debug/SchedularApp.csproj.CoreCompileInputs.cache
+/Users/mohanadsafwat/Documents/GitHub/Scheduler-App/SchedularApp/SchedularApp/obj/Debug/SchedularApp.exe
+/Users/mohanadsafwat/Documents/GitHub/Scheduler-App/SchedularApp/SchedularApp/obj/Debug/SchedularApp.pdb

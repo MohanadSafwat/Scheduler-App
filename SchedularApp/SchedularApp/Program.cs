@@ -1,65 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SchedularApp
 {
     class Program
     {
-        private static void Quick_Sort(double[] arr, int left, int right)
-        {
-            if (left < right)
-            {
-                int pivot = Partition(arr, left, right);
-
-                if (pivot > 1)
-                {
-                    Quick_Sort(arr, left, pivot - 1);
-                }
-                if (pivot + 1 < right)
-                {
-                    Quick_Sort(arr, pivot + 1, right);
-                }
-            }
-
-        }
-
-        private static int Partition(double[] arr, int left, int right)
-        {
-            double pivot = arr[left];
-            while (true)
-            {
-
-                while (arr[left] < pivot)
-                {
-                    left++;
-                }
-
-                while (arr[right] > pivot)
-                {
-                    right--;
-                }
-
-                if (left < right)
-                {
-                    if (arr[left] == arr[right]) return right;
-
-                    double temp = arr[left];
-                    arr[left] = arr[right];
-                    arr[right] = temp;
 
 
-                }
-                else
-                {
-                    return right;
-                }
-            }
-        }
 
         public static void Main()
         {
-            int numberOfProcesses, pre, numberOfRemainProcesses;
-            Console.WriteLine("Please enter 1 if Non Preemptive and zero if Preemptive");
-            pre = Convert.ToInt32(Console.ReadLine());
+            int numberOfProcesses, preemtiveBool, numberOfRemainProcesses, priorityBool;
+            Console.WriteLine("Please enter 1 if priority and 0 if sjf");
+            priorityBool = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Please enter 0 if Non Preemptive and 1 if Preemptive");
+            preemtiveBool = Convert.ToInt32(Console.ReadLine());
 
             Console.WriteLine("Please enter number of the processes");
             numberOfProcesses = Convert.ToInt32(Console.ReadLine());
@@ -67,22 +23,55 @@ namespace SchedularApp
             Process[] ProcessesArr = new Process[numberOfProcesses];
             numberOfRemainProcesses = numberOfProcesses;
 
-            for (int i = 0; i < numberOfProcesses; i++)
+            double[,] timeLine = new double[200, 3];
+            int countTimeLine = 0;
+
+            if (priorityBool == 0)
             {
-                int arrival, burst, priority;
-                Console.WriteLine("Please enter arrival time of process " + (i + 1));
+                for (int i = 0; i < numberOfProcesses; i++)
+                {
+                    int arrival, burst;
+                    Console.WriteLine("Please enter arrival time of process " + (i + 1));
 
-                arrival = Convert.ToInt32(Console.ReadLine());
+                    arrival = Convert.ToInt32(Console.ReadLine());
 
-                Console.WriteLine("Please enter burst time of process " + (i + 1));
-                burst = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Please enter burst time of process " + (i + 1));
+                    burst = Convert.ToInt32(Console.ReadLine());
 
-                Console.WriteLine("Please enter priority of process " + (i + 1));
-                priority = Convert.ToInt32(Console.ReadLine());
+                    
 
-                ProcessesArr[i] = new Process(arrival, burst, priority);
+                    ProcessesArr[i] = new Process(arrival, burst);
 
+                }
             }
+            else
+            {
+
+
+                //for (int i = 0; i < numberOfProcesses; i++)
+                //{
+                //    int arrival, burst, priority;
+                //    Console.WriteLine("Please enter arrival time of process " + (i + 1));
+
+                //    arrival = Convert.ToInt32(Console.ReadLine());
+
+                //    Console.WriteLine("Please enter burst time of process " + (i + 1));
+                //    burst = Convert.ToInt32(Console.ReadLine());
+
+                //    Console.WriteLine("Please enter priority of process " + (i + 1));
+                //    priority = Convert.ToInt32(Console.ReadLine());
+
+                //    ProcessesArr[i] = new Process(arrival, burst, priority);
+
+                //}
+            }
+            ProcessesArr[0] = new Process(0, 1, 2);
+            ProcessesArr[1] = new Process(1, 7, 6);
+            ProcessesArr[2] = new Process(2, 3, 3);
+            ProcessesArr[3] = new Process(3, 6, 5);
+            ProcessesArr[4] = new Process(4, 5, 4);
+            ProcessesArr[5] = new Process(5, 15, 10);
+            ProcessesArr[6] = new Process(6, 8, 9);
 
             Process firstProcess = new Process();
             Process nextProcess = new Process();
@@ -94,207 +83,414 @@ namespace SchedularApp
             int numberOfInProcess = 0;
 
             double[] arrivalTimes = new double[numberOfProcesses];
-            Quick_Sort(arrivalTimes, 0, arrivalTimes.Length - 1);
+            int countUniqueArray = 0;
 
-            double timeNow = arrivalTimes[0];
+            for (int i = 0; i < arrivalTimes.Length; i++)
+            {
+                arrivalTimes[i] = ProcessesArr[i].Arrival;
+            }
+            for (int i = 0; i < arrivalTimes.Length; i++)
+            {
+                bool isDuplicate = false;
+                for (int j = 0; j < i; j++)
+                {
+                    if (arrivalTimes[i] == arrivalTimes[j])
+                    {
+                        isDuplicate = true;
+                        break;
+                    }
+                }
+
+                if (!isDuplicate)
+                {
+                    countUniqueArray++;
+
+                }
+            }
+            double[] arrivalTimesUnique = new double[countUniqueArray];
+            countUniqueArray = 0;
+
+            for (int i = 0; i < arrivalTimes.Length; i++)
+            {
+                bool isDuplicate = false;
+                for (int j = 0; j < i; j++)
+                {
+                    if (arrivalTimes[i] == arrivalTimes[j])
+                    {
+                        isDuplicate = true;
+                        break;
+                    }
+                }
+
+                if (!isDuplicate)
+                {
+                    arrivalTimesUnique[countUniqueArray] = arrivalTimes[i];
+                    countUniqueArray++;
+
+                }
+            }
+
+            Array.Sort(arrivalTimesUnique);
+
+            double timeNow = arrivalTimesUnique[0];
             firstProcess = ProcessesArr[0];
 
+            //for (int i = 0; i < arrivalTimesUnique.Length; i++)
+            //{
+            //    Console.WriteLine(arrivalTimesUnique[i]);
+            //}
 
-
-            if (pre == 1)
-            {
-                if (numberOfProcesses > 1)
-                {
-                    for (int i = 1; i < numberOfProcesses; i++)
-                    {
-
-                        if (firstProcess.Arrival > ProcessesArr[i].Arrival)
-                        {
-                            firstProcess = ProcessesArr[i];
-                            numberOfFirstProcess = i;
-                            timeNow = firstProcess.Arrival;
-
-                        }
-                        else if (firstProcess.Arrival == ProcessesArr[i].Arrival)
-                        {
-                            if (firstProcess.Priority > ProcessesArr[i].Priority)
-                            {
-                                firstProcess = ProcessesArr[i];
-                                numberOfFirstProcess = i;
-                                timeNow = firstProcess.Arrival;
-                            }
-                        }
-                    }
-
-                }
-                else
-                {
-                    firstProcess = ProcessesArr[0];
-                    numberOfFirstProcess = 0;
-                    timeNow = firstProcess.Arrival;
-                }
-
-
-                ProcessesArr[numberOfFirstProcess].Departure = timeNow;
-                timeNow += ProcessesArr[numberOfFirstProcess].Burst;
-                ProcessesArr[numberOfFirstProcess].TurnAround = timeNow;
-                numberOfRemainProcesses--;
-                ProcessesArr[numberOfFirstProcess].Status = "done";
-
-
-                bool flagNext = true;
-
-
-                while (numberOfRemainProcesses > 0)
-                {
-                    for (int i = 0; i < numberOfProcesses; i++)
-                    {
-                        if (ProcessesArr[i].Status != "done" || ProcessesArr[i].Arrival > timeNow)
-                        {
-
-                            if (flagNext)
-                            {
-                                nextProcess = ProcessesArr[i];
-                                numberOfNextProcess = i;
-                                flagNext = false;
-                            }
-                            if (nextProcess.Priority > ProcessesArr[i].Priority)
-                            {
-
-                                nextProcess = ProcessesArr[i];
-                                numberOfNextProcess = i;
-
-                            }
-                        }
-                    }
-
-                    ProcessesArr[numberOfNextProcess].Departure = timeNow;
-                    timeNow += ProcessesArr[numberOfNextProcess].Burst;
-                    ProcessesArr[numberOfNextProcess].TurnAround = timeNow;
-                    ProcessesArr[numberOfNextProcess].Status = "done";
-
-                    numberOfRemainProcesses--;
-                    flagNext = true;
-                }
-
-            }
-            else if (pre == 0)
+            if (priorityBool == 1)
             {
 
-
-
-                //if (numberOfProcesses > 1)
-                //{
-                //    for (int i = 1; i < numberOfProcesses; i++)
-                //    {
-
-                //        if (firstProcess.Arrival > ProcessesArr[i].Arrival)
-                //        {
-                //            firstProcess = ProcessesArr[i];
-                //            numberOfFirstProcess = i;
-                //            timeNow = firstProcess.Arrival;
-
-                //        }
-                //        else if (firstProcess.Arrival == ProcessesArr[i].Arrival)
-                //        {
-                //            if (firstProcess.Priority > ProcessesArr[i].Priority)
-                //            {
-                //                firstProcess = ProcessesArr[i];
-                //                numberOfFirstProcess = i;
-                //                timeNow = firstProcess.Arrival;
-                //            }
-                //        }
-                //    }
-
-                //}
-                //else
-                //{
-                //    firstProcess = ProcessesArr[0];
-                //    numberOfFirstProcess = 0;
-                //    timeNow = firstProcess.Arrival;
-                //}
-
-                //ProcessesArr[numberOfFirstProcess].Departure = timeNow;
-                //timeNow += ProcessesArr[numberOfFirstProcess].Burst;
-                //ProcessesArr[numberOfFirstProcess].TurnAround = timeNow;
-                //numberOfRemainProcesses--;
-                //ProcessesArr[numberOfFirstProcess].Status = "done";
-
-                bool flagNext = true;
-
-                while (numberOfRemainProcesses > 0)
+                if (preemtiveBool == 0)
                 {
-                    for (int j = 0; j < arrivalTimes.Length; j++)
+
+
+
+
+                    bool flagNext = true;
+
+
+                    while (numberOfRemainProcesses > 0)
                     {
                         for (int i = 0; i < numberOfProcesses; i++)
                         {
-                            if (ProcessesArr[i].Status != "done" || ProcessesArr[i].Arrival > timeNow)
+                            if (ProcessesArr[i].Status != "done" && ProcessesArr[i].Arrival <= timeNow)
                             {
 
                                 if (flagNext)
                                 {
-                                    inProcess = ProcessesArr[i];
-                                    numberOfInProcess = i;
+                                    nextProcess = ProcessesArr[i];
+                                    numberOfNextProcess = i;
                                     flagNext = false;
                                 }
-                                if (inProcess.Priority > ProcessesArr[i].Priority)
+                                if (nextProcess.Priority > ProcessesArr[i].Priority)
                                 {
 
-                                    inProcess = ProcessesArr[i];
-                                    numberOfInProcess = i;
+                                    nextProcess = ProcessesArr[i];
+                                    numberOfNextProcess = i;
 
                                 }
                             }
                         }
-                        if (String.Compare(ProcessesArr[numberOfInProcess].Status, "waiting") != 0)
+
+                        ProcessesArr[numberOfNextProcess].Execution = timeNow;
+                        timeNow += ProcessesArr[numberOfNextProcess].Burst;
+                        ProcessesArr[numberOfNextProcess].Departure = timeNow;
+                        ProcessesArr[numberOfNextProcess].TurnAround = ProcessesArr[numberOfNextProcess].Departure - ProcessesArr[numberOfNextProcess].Arrival;
+                        ProcessesArr[numberOfNextProcess].Status = "done";
+                        timeLine[countTimeLine, 0] = numberOfNextProcess;
+                        timeLine[ countTimeLine,1] = ProcessesArr[numberOfNextProcess].Execution;
+                        timeLine[countTimeLine, 2] = ProcessesArr[numberOfNextProcess].Departure;
+                        countTimeLine++;
+
+
+                        numberOfRemainProcesses--;
+                        flagNext = true;
+                    }
+
+                }
+                else if (preemtiveBool == 1)
+                {
+
+                    bool flagNext = true;
+
+                    while (numberOfRemainProcesses > 0)
+                    {
+                        for (int j = 0; j < arrivalTimesUnique.Length; j++)
                         {
-                            ProcessesArr[numberOfNextProcess].Departure = timeNow;
-                        }
-                        if (j != arrivalTimes.Length - 1)
-                        {
-                            if (arrivalTimes[j + 1] - arrivalTimes[j] >= ProcessesArr[numberOfInProcess].Remaining)
+                            for (int i = 0; i < numberOfProcesses; i++)
                             {
-                                timeNow += arrivalTimes[j + 1] - arrivalTimes[j];
-                                break;
+                                if (ProcessesArr[i].Status != "done" && ProcessesArr[i].Arrival <= timeNow)
+                                {
+
+                                    if (flagNext)
+                                    {
+                                        inProcess = ProcessesArr[i];
+                                        numberOfInProcess = i;
+                                        flagNext = false;
+                                    }
+                                    if (inProcess.Priority > ProcessesArr[i].Priority)
+                                    {
+
+                                        inProcess = ProcessesArr[i];
+                                        numberOfInProcess = i;
+
+                                    }
+                                }
+                            }
+                            if (String.Compare(ProcessesArr[numberOfInProcess].Status, "waiting") != 0)
+                            {
+                                ProcessesArr[numberOfInProcess].Execution = timeNow;
+                            }
+                            if (j == arrivalTimesUnique.Length - 1 && ProcessesArr[numberOfInProcess].Remaining != 0)
+                            {
+                                j = 0;
+                            }
+                            if (numberOfRemainProcesses != 1)
+                            {
+                                if (j != arrivalTimesUnique.Length - 1)
+                                {
+                                    if (arrivalTimesUnique[j + 1] - arrivalTimesUnique[j] >= ProcessesArr[numberOfInProcess].Remaining)
+                                    {
+                                        timeLine[countTimeLine, 0] = numberOfInProcess;
+                                        timeLine[countTimeLine, 1] = timeNow;
+                                        timeNow += ProcessesArr[numberOfInProcess].Remaining;
+                                        ProcessesArr[numberOfInProcess].Remaining = 0;
+                                        timeLine[countTimeLine, 2] = timeNow;
+                                        if (countTimeLine != 0)
+                                        {
+                                            if (timeLine[countTimeLine - 1, 0] != timeLine[countTimeLine, 0])
+                                            {
+                                                countTimeLine++;
+                                            }
+                                        }
+                                        else {
+
+                                            countTimeLine++; }
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        timeLine[countTimeLine, 0] = numberOfInProcess;
+                                        timeLine[countTimeLine, 1] = timeNow;
+                                        timeNow += arrivalTimesUnique[j + 1] - arrivalTimesUnique[j];
+                                        ProcessesArr[numberOfInProcess].Remaining -= arrivalTimesUnique[j + 1] - arrivalTimesUnique[j];
+                                        ProcessesArr[numberOfInProcess].Status = "waiting";
+                                        timeLine[countTimeLine, 2] = timeNow;
+                                        if (countTimeLine != 0)
+                                        {
+                                            if (timeLine[countTimeLine - 1, 0] != timeLine[countTimeLine, 0])
+                                            {
+                                                countTimeLine++;
+                                            }
+                                        }
+                                        else {
+                                           
+                                            countTimeLine++;
+                                        }
+
+
+
+                                    }
+                                }
                             }
                             else
                             {
-                                timeNow += arrivalTimes[j + 1] - arrivalTimes[j];
-                                ProcessesArr[numberOfInProcess].Remaining = arrivalTimes[j + 1] - arrivalTimes[j];
-                                ProcessesArr[numberOfInProcess].Status = "waiting";
+                                timeLine[countTimeLine, 0] = numberOfInProcess;
+                                timeLine[countTimeLine, 1] = timeNow;
+                                timeNow += ProcessesArr[numberOfInProcess].Remaining;
+                                ProcessesArr[numberOfInProcess].Remaining = 0;
+                                timeLine[countTimeLine, 2] = timeNow;
+                                countTimeLine++;
+                                break;
+
+                            }
+                            flagNext = true;
+
+
+                        }
+                        ProcessesArr[numberOfInProcess].Departure = timeNow;
+                        ProcessesArr[numberOfInProcess].TurnAround = ProcessesArr[numberOfInProcess].Departure - ProcessesArr[numberOfInProcess].Arrival;
+                        ProcessesArr[numberOfInProcess].Status = "done";
+
+                        numberOfRemainProcesses--;
+                        flagNext = true;
+                    }
+
+
+
+
+
+                }
+            }
+            else if (priorityBool == 0)
+            {
+                if (preemtiveBool == 0)
+                {
+
+                    bool flagNext = true;
+
+
+                    while (numberOfRemainProcesses > 0)
+                    {
+                        for (int i = 0; i < numberOfProcesses; i++)
+                        {
+                            if (ProcessesArr[i].Status != "done" && ProcessesArr[i].Arrival <= timeNow)
+                            {
+
+                                if (flagNext)
+                                {
+                                    nextProcess = ProcessesArr[i];
+                                    numberOfNextProcess = i;
+                                    flagNext = false;
+                                }
+                                if (nextProcess.Burst > ProcessesArr[i].Burst)
+                                {
+
+                                    nextProcess = ProcessesArr[i];
+                                    numberOfNextProcess = i;
+
+                                }
                             }
                         }
+
+                        ProcessesArr[numberOfNextProcess].Execution = timeNow;
+                        timeNow += ProcessesArr[numberOfNextProcess].Burst;
+                        ProcessesArr[numberOfNextProcess].Departure = timeNow;
+                        ProcessesArr[numberOfNextProcess].TurnAround = ProcessesArr[numberOfNextProcess].Departure - ProcessesArr[numberOfNextProcess].Arrival;
+                        ProcessesArr[numberOfNextProcess].Status = "done";
+                        numberOfRemainProcesses--;
+                        timeLine[countTimeLine, 0] = numberOfNextProcess;
+                        timeLine[countTimeLine, 1] = ProcessesArr[numberOfNextProcess].Execution;
+                        timeLine[countTimeLine, 2] = ProcessesArr[numberOfNextProcess].Departure;
+                        countTimeLine++;
+
                         flagNext = true;
-
-
                     }
-                    timeNow += ProcessesArr[numberOfInProcess].Remaining;
-                    ProcessesArr[numberOfNextProcess].TurnAround = timeNow;
-                    ProcessesArr[numberOfNextProcess].Status = "done";
+                }
+                else if (preemtiveBool == 1)
+                {
 
-                    numberOfRemainProcesses--;
-                    flagNext = true;
+                    bool flagNext = true;
+
+                    while (numberOfRemainProcesses > 0)
+                    {
+                        for (int j = 0; j < arrivalTimesUnique.Length; j++)
+                        {
+                            for (int i = 0; i < numberOfProcesses; i++)
+                            {
+                                if (ProcessesArr[i].Status != "done" && ProcessesArr[i].Arrival <= timeNow)
+                                {
+
+                                    if (flagNext)
+                                    {
+                                        inProcess = ProcessesArr[i];
+                                        numberOfInProcess = i;
+                                        flagNext = false;
+                                    }
+                                    if (inProcess.Burst > ProcessesArr[i].Burst)
+                                    {
+
+                                        inProcess = ProcessesArr[i];
+                                        numberOfInProcess = i;
+
+                                    }
+                                }
+                            }
+                            if (String.Compare(ProcessesArr[numberOfInProcess].Status, "waiting") != 0)
+                            {
+                                ProcessesArr[numberOfInProcess].Execution = timeNow;
+                            }
+                            if (j == arrivalTimesUnique.Length - 1 && ProcessesArr[numberOfInProcess].Remaining != 0)
+                            {
+                                j = 0;
+                            }
+                            if (numberOfRemainProcesses != 1)
+                            {
+                                if (j != arrivalTimesUnique.Length - 1)
+                                {
+                                    if (arrivalTimesUnique[j + 1] - arrivalTimesUnique[j] >= ProcessesArr[numberOfInProcess].Remaining)
+                                    {
+                                        timeLine[countTimeLine, 0] = numberOfInProcess;
+                                        timeLine[countTimeLine, 1] = timeNow;
+                                        timeNow += ProcessesArr[numberOfInProcess].Remaining;
+                                        ProcessesArr[numberOfInProcess].Remaining = 0;
+                                        timeLine[countTimeLine, 2] = timeNow;
+                                        if (countTimeLine != 0)
+                                        {
+                                            if (timeLine[countTimeLine - 1, 0] != timeLine[countTimeLine, 0])
+                                            {
+                                                countTimeLine++;
+                                            }
+                                        }
+                                        else
+                                        {
+
+                                            countTimeLine++;
+                                        }
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        timeLine[countTimeLine, 0] = numberOfInProcess;
+                                        timeLine[countTimeLine, 1] = timeNow;
+                                        timeNow += arrivalTimesUnique[j + 1] - arrivalTimesUnique[j];
+                                        ProcessesArr[numberOfInProcess].Remaining -= arrivalTimesUnique[j + 1] - arrivalTimesUnique[j];
+                                        ProcessesArr[numberOfInProcess].Status = "waiting";
+                                        timeLine[countTimeLine, 2] = timeNow;
+                                        if (countTimeLine != 0)
+                                        {
+                                            if (timeLine[countTimeLine - 1, 0] != timeLine[countTimeLine, 0])
+                                            {
+                                                countTimeLine++;
+                                            }
+                                        }
+                                        else
+                                        {
+
+                                            countTimeLine++;
+                                        }
+
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                timeLine[countTimeLine, 0] = numberOfInProcess;
+                                timeLine[countTimeLine, 1] = timeNow;
+                                timeNow += ProcessesArr[numberOfInProcess].Remaining;
+                                ProcessesArr[numberOfInProcess].Remaining = 0;
+                                timeLine[countTimeLine, 2] = timeNow;
+                                countTimeLine++;
+                                break;
+
+                            }
+
+                            flagNext = true;
+
+
+                        }
+
+                        ProcessesArr[numberOfInProcess].Departure = timeNow;
+                        ProcessesArr[numberOfInProcess].TurnAround = ProcessesArr[numberOfInProcess].Departure - ProcessesArr[numberOfInProcess].Arrival;
+                        ProcessesArr[numberOfInProcess].Status = "done";
+
+
+                        numberOfRemainProcesses--;
+                        flagNext = true;
+                    }
                 }
 
+            }
+            double[,] timeLineFinal = new double[countTimeLine ,3];
+            for (int i = 0; i < countTimeLine; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    timeLineFinal[i,j] = timeLine[i,j];
+                }
 
 
             }
 
             double totalWait = 0;
 
-            for (int i = 1; i <= numberOfProcesses; i++)
-            {
-                totalWait += ProcessesArr[i - 1].WaitingTime();
-                Console.WriteLine("process: " + i);
-                Console.WriteLine("from: " + ProcessesArr[i - 1].Departure + " to: " + ProcessesArr[i - 1].TurnAround);
+            //for (int i = 1; i <= numberOfProcesses; i++)
+            //{
+            //    totalWait += ProcessesArr[i - 1].WaitingTime();
+            //    Console.WriteLine("process: " + i);
+            //    Console.WriteLine("from: " + ProcessesArr[i - 1].Execution + " to: " + ProcessesArr[i - 1].Departure);
 
+            //}
+            for (int i = 0; i < countTimeLine; i++)
+            {
+                Console.WriteLine("process: " + timeLine[i, 0]);
+                Console.WriteLine("from: " + timeLine[i, 1] + " to: " + timeLine[i, 2]);
             }
 
-            Console.WriteLine("avg wait: " + totalWait / numberOfProcesses);
-
-
-
-
+            //Console.WriteLine("avg wait: " + totalWait / numberOfProcesses);
 
 
 
@@ -303,5 +499,10 @@ namespace SchedularApp
         }
     }
 
+        
 
-}
+        }
+    
+
+
+

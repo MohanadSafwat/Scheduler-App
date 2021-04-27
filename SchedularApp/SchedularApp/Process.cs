@@ -65,6 +65,8 @@ namespace SchedularApp
         {
             arrival_time = arrival;
             burst_time = burst;
+            status = "active";
+            remainingTime = burst;
         }
         public Process(double arrival, double burst, double p)
         {
