@@ -1,0 +1,13 @@
+C:\Users\mosta\OneDrive\Desktop\Short-Jop-First\Short-Jop-First\bin\Debug\netcoreapp3.1\Short-Jop-First.exe
+C:\Users\mosta\OneDrive\Desktop\Short-Jop-First\Short-Jop-First\bin\Debug\netcoreapp3.1\Short-Jop-First.deps.json
+C:\Users\mosta\OneDrive\Desktop\Short-Jop-First\Short-Jop-First\bin\Debug\netcoreapp3.1\Short-Jop-First.runtimeconfig.json
+C:\Users\mosta\OneDrive\Desktop\Short-Jop-First\Short-Jop-First\bin\Debug\netcoreapp3.1\Short-Jop-First.runtimeconfig.dev.json
+C:\Users\mosta\OneDrive\Desktop\Short-Jop-First\Short-Jop-First\bin\Debug\netcoreapp3.1\Short-Jop-First.dll
+C:\Users\mosta\OneDrive\Desktop\Short-Jop-First\Short-Jop-First\bin\Debug\netcoreapp3.1\Short-Jop-First.pdb
+C:\Users\mosta\OneDrive\Desktop\Short-Jop-First\Short-Jop-First\obj\Debug\netcoreapp3.1\Short-Jop-First.csprojAssemblyReference.cache
+C:\Users\mosta\OneDrive\Desktop\Short-Jop-First\Short-Jop-First\obj\Debug\netcoreapp3.1\Short-Jop-First.AssemblyInfoInputs.cache
+C:\Users\mosta\OneDrive\Desktop\Short-Jop-First\Short-Jop-First\obj\Debug\netcoreapp3.1\Short-Jop-First.AssemblyInfo.cs
+C:\Users\mosta\OneDrive\Desktop\Short-Jop-First\Short-Jop-First\obj\Debug\netcoreapp3.1\Short-Jop-First.csproj.CoreCompileInputs.cache
+C:\Users\mosta\OneDrive\Desktop\Short-Jop-First\Short-Jop-First\obj\Debug\netcoreapp3.1\Short-Jop-First.dll
+C:\Users\mosta\OneDrive\Desktop\Short-Jop-First\Short-Jop-First\obj\Debug\netcoreapp3.1\Short-Jop-First.pdb
+C:\Users\mosta\OneDrive\Desktop\Short-Jop-First\Short-Jop-First\obj\Debug\netcoreapp3.1\Short-Jop-First.genruntimeconfig.cache
